@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+  localstack:
+#    container_name: "localstack"
+    image: localstack/localstack:latest
+#    network_mode: bridge
+#    container_name: aws-node-sqs-worker
+#    hostname: localstack
+    ports:
+      - '4566-4599:4566-4599'
+    environment:
+      # All APIs are exposed via a single edge service (default = 4566)
+      # JUST PICK WHAT YOU NEED FOR AWS E2E - IF ANYTHING (POSTGRES IS NOT SUPPORTED SO SEPARATE IMAGE USED)
+      SERVICES: sqs,lambda,apigateway,iam,sts,s3,cloudformation
+      EDGE_PORT: '4566'
+      DEBUG: 1
+      DEFAULT_REGION: 'eu-west-1'
+      AWS_DEFAULT_REGION: 'eu-west-1'
+      AWS_ACCESS_KEY: 'foo'
+      AWS_SECRET_ACCESS_KEY: 'bar'
+      LAMBDA_EXECUTOR: docker
+      LAMBDA_DOCKER_NETWORK: localstack-net
+      HOSTNAME_EXTERNAL: localstack
+#      LAMBDA_REMOTE_DOCKER: 'false'
+#      LAMBDA_REMOVE_CONTAINERS: 'true'
+#      DOCKER_HOST: unix:///var/run/docker.sock
+#      DATA_DIR: /tmp/localstack/data
+#      - HOSTNAME=127.0.0.1
+#      HOSTNAME_EXTERNAL: localstack
+#      - SQS_PORT_EXTERNAL=4566
+#      LOCALSTACK_HOSTNAME:  172.17.0.5
+#      - LOCALSTACK_PORT=4566
+#    networks:
+#      - localstack_default
+    volumes:
+      - "${TEMPDIR:-/tmp/localstack}:/temp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+#      - ./bin:/docker-entrypoint-initaws.d
+#
+#networks:
+#  localstack-net:
+#    external: false
+#    driver: bridge
+#    name: localstack-net
