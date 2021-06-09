@@ -12,17 +12,7 @@ custom:
       - local
     host: http://localhost  # optional - LocalStack host to connect to
     edgePort: 4566  # optional - LocalStack edge port to connect to
-    autostart: true  # optional - Start LocalStack in Docker on Serverless deploy
-    endpointFile: endpoints.json
     debug: true
-#    lambda:
-#      # Enable this flag to improve performance
-#      mountCode: True
-#    docker:
-#      # Enable this flag to run "docker ..." commands as sudo
-#      sudo: False
-#  stages:
-#    local:
 
 provider:
   name: aws
@@ -30,14 +20,6 @@ provider:
   region: eu-west-1
 #  lambdaHashingVersion: '20201221'
   stage: local
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - sqs:SendMessage
-          Resource:
-            - Fn::GetAtt: [ WorkerQueue, Arn ]
 
 functions:
   producer:
